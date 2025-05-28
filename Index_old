@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MirrorMinds.ai – Reflect. Grow. Thrive.</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      color: #1f2937;
+      text-align: center;
+      padding: 0;
+    }
+    .banner {
+      background-color: #facc15;
+      color: #1a202c;
+      padding: 0.75rem;
+      font-weight: bold;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+    header {
+      background: linear-gradient(to right, #6366f1, #8b5cf6);
+      color: white;
+      padding: 3rem 1rem;
+    }
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+    }
+    p.tagline {
+      font-size: 1.3rem;
+      margin-top: 0;
+      font-style: italic;
+    }
+    section {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+      text-align: left;
+    }
+    h2 {
+      color: #4f46e5;
+    }
+    ul {
+      text-align: left;
+      padding-left: 1.5rem;
+    }
+    .cta {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 12px 24px;
+      background-color: #4f46e5;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="banner">
+    🚧 MirrorMinds.ai is under construction – Stay tuned!
+  </div>
+
+  <header>
+    <h1>MirrorMinds.ai</h1>
+    <p class="tagline">Reflect. Grow. Thrive.</p>
+  </header>
+
+  <section>
+    <h2>What We Do</h2>
+    <p>
+      MirrorMinds.ai is an emotional intelligence AI platform helping users reflect on their communication patterns,
+      emotional responses, and self-awareness in real time. Designed for students, professionals, and educators, it
+      combines multimodal analysis with personalized coaching to unlock your full emotional potential.
+    </p>
+
+    <h2>Core Features</h2>
+    <ul>
+      <li>Real-time emotional profiling via voice and facial analysis</li>
+      <li>Personalized feedback on communication style</li>
+      <li>EQ growth tracks tailored to your development goals</li>
+      <li>Dashboards for mentors, HR, and educators</li>
+    </ul>
+
+    <h2>Who It's For</h2>
+    <p>
+      Whether you're a student preparing for interviews, a coach helping future leaders, or a university investing in soft skills—
+      MirrorMinds.ai is built for growth.
+    </p>
+
+    <a class="cta" href="mailto:hello@mirrorminds.ai">Get In Touch</a>
+  </section>
+
+  <footer>
+    &copy; 2025 MirrorMinds.ai – All rights reserved.
+  </footer>
+
+</body>
+</html>
