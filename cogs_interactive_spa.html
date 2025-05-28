@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Operating Gifts (COGs) - Interactive Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices:
+        - Report Info: Comparison Table (Section 7) -> Goal: Compare COGs vs Traditional -> Viz/Presentation: HTML Table + Interactive Radar Chart (Chart.js) -> Interaction: Table row hover, dynamic radar chart display -> Justification: Radar chart provides a quick visual summary of superiority across multiple dimensions, enhancing the table's impact.
+        - Report Info: Seven COGs (Section 5) -> Goal: Inform & Detail -> Viz/Presentation: Clickable COG selectors updating a content display area (HTML/JS) -> Interaction: User clicks a COG name to see its definition, scientific alignment, and potential impact. -> Justification: Allows focused exploration of each COG without overwhelming the user with all information at once.
+        - Report Info: Key Innovations (Section 3) & Advantages (Section 4) -> Goal: Inform & Highlight -> Viz/Presentation: Styled cards/info blocks (HTML/Tailwind) -> Interaction: Static display, clear visual hierarchy. -> Justification: Easy-to-digest presentation of key selling points.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Assuming Inter is loaded or a fallback is acceptable */
+        }
+        .bg-warm-neutral-light { background-color: #F5F5F5; }
+        .bg-warm-neutral-medium { background-color: #EDEAE5; }
+        .text-warm-neutral-dark { color: #333333; }
+        .accent-teal { color: #4FD1C5; }
+        .bg-accent-teal { background-color: #4FD1C5; }
+        .border-accent-teal { border-color: #4FD1C5; }
+        .nav-link {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #4FD1C5;
+            color: white;
+        }
+        .cog-button {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .cog-button.active, .cog-button:hover {
+            background-color: #4FD1C5;
+            color: white;
+            border-color: #3EAF9F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* max-w-2xl */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px;
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .chart-container {
+                height: 350px;
+            }
+        }
+        h2 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        h3 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 0.75rem; /* mb-3 */
+        }
+        .content-section {
+            padding-top: 4rem; /* pt-16 */
+            padding-bottom: 4rem; /* pb-16 */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 1.5rem; /* p-6 */
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); /* shadow-lg */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); /* shadow-2xl */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e2e8f0; /* border-gray-300 */
+            padding: 0.75rem; /* p-3 */
+            text-align: left;
+        }
+        th {
+            background-color: #f7fafc; /* bg-gray-100 */
+        }
+        .comparison-table tr:hover {
+            background-color: #ebf8ff; /* bg-blue-50 */
+        }
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0,0,0,0.75);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-warm-neutral-light text-warm-neutral-dark">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold accent-teal">COGs Framework</a>
+            <div class="hidden md:flex space-x-4">
+                <a href="#challenge" class="nav-link">The Challenge</a>
+                <a href="#intro-cogs" class="nav-link">Introducing COGs</a>
+                <a href="#advantage" class="nav-link">Advantage</a>
+                <a href="#deep-dive" class="nav-link">The 7 COGs</a>
+                <a href="#comparison" class="nav-link">Comparison</a>
+                <a href="#applications" class="nav-link">Applications</a>
+                <a href="#conclusion" class="nav-link">Conclusion</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-warm-neutral-dark focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <a href="#challenge" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">The Challenge</a>
+            <a href="#intro-cogs" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Introducing COGs</a>
+            <a href="#advantage" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Advantage</a>
+            <a href="#deep-dive" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">The 7 COGs</a>
+            <a href="#comparison" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Comparison</a>
+            <a href="#applications" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Applications</a>
+            <a href="#conclusion" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Conclusion</a>
+        </div>
+    </nav>
+
+    <header class="bg-warm-neutral-medium content-section text-center">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Elevating Human Potential with <span class="accent-teal">Core Operating Gifts (COGs)</span></h1>
+            <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">Discover a dynamic, strengths-based approach to unlock latent capabilities at individual and organizational levels, fostering a workforce that is actively developed, not just identified.</p>
+            <a href="#intro-cogs" class="bg-accent-teal text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 text-lg">Explore COGs</a>
+        </div>
+    </header>
+
+    <section id="challenge" class="content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">The Evolving Landscape of Human Capital: Why Traditional Approaches Fall Short</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">This section outlines the limitations of conventional personality assessments in today's dynamic environment. It explains why static models are insufficient for capturing the evolving nature of human potential and meeting the demands for continuous adaptation and growth in organizations.</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card">
+                    <h3 class="accent-teal">Static Snapshots</h3>
+                    <p>Traditional tools (MBTI, DISC, Big Five) offer fixed typologies, failing to capture the fluid nature of human potential and how individuals evolve.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Lack of Nuance</h3>
+                    <p>These models often inadequately address emotional development, dynamic capacity building, and context sensitivity, limiting their practical application for strategic initiatives.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Hidden Costs</h3>
+                    <p>Deficiencies in traditional models lead to talent stagnation, misapplication of strengths, higher turnover, and reduced productivity, creating a compelling need for a more holistic approach.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="intro-cogs" class="bg-warm-neutral-medium content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">Introducing Core Operating Gifts (COGs): A New Paradigm for Growth</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">This section introduces the Core Operating Gifts (COGs) framework as a revolutionary alternative for understanding and developing human potential. It highlights the key innovations of COGs that distinguish them from conventional assessments, setting the stage for a deeper dive into their benefits and applications.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card">
+                    <h3 class="accent-teal">Dynamic Development</h3>
+                    <p>COGs are skills that evolve through awareness, reflection, and intentional growth, fostering continuous development rather than fixed categorization.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Emotional Integration</h3>
+                    <p>Each COG incorporates an "emotional center," blending cognition, feeling, and action, acknowledging the crucial role of emotions in how traits manifest.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Contextual Behavior</h3>
+                    <p>COGs recognize that strengths manifest differently based on life stage, situation, or team dynamics, allowing for nuanced understanding and application.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Holistic Impact</h3>
+                    <p>COGs connect personal purpose, leadership behaviors, team effectiveness, and organizational culture, influencing broad organizational dynamics.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Scientific Grounding</h3>
+                    <p>Each COG is aligned with established psychological theories, ensuring validity, credibility, and practical relevance.</p>
+                </div>
+                 <div class="card">
+                    <h3 class="accent-teal">Future-Ready</h3>
+                    <p>COGs shift the paradigm from "what you are" to "who you can become," nurturing future talent and a growth mindset throughout the workforce.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="advantage" class="content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">The COG Advantage: Unlocking Dynamic Potential & Strategic Impact</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">Here, we explore the distinct advantages offered by the COG framework. Each feature contributes to superior talent development and strategic outcomes, translating theoretical benefits into tangible business value and demonstrating why COGs are a more effective approach.</p>
+            <div class="space-y-8">
+                <div class="card">
+                    <h3>Fostering Continuous Growth</h3>
+                    <p>COGs enable a culture of continuous learning and adaptability, supporting talent retention and internal mobility by providing clear growth pathways.</p>
+                </div>
+                <div class="card">
+                    <h3>Cultivating Resilient & Intelligent Teams</h3>
+                    <p>Emotional integration leads to more emotionally intelligent leaders and resilient teams, strengthening cohesion and improving workplace well-being.</p>
+                </div>
+                <div class="card">
+                    <h3>Precision Talent Application</h3>
+                    <p>Contextual understanding allows for precise talent deployment, maximizing individual and team effectiveness and leading to higher ROI on development spending.</p>
+                </div>
+                <div class="card">
+                    <h3>Aligning Purpose with Performance</h3>
+                    <p>COGs bridge personal purpose with organizational goals, fostering intrinsic motivation, genuine engagement, and a resilient workforce.</p>
+                </div>
+                 <div class="card">
+                    <h3>Interpersonal Impact Modeling</h3>
+                    <p>COGs explicitly embed interpersonal impact (empathy, communication), improving team dynamics, psychological safety, and collaboration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="deep-dive" class="bg-warm-neutral-medium content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">Deep Dive into The Seven Core Operating Gifts</h2>
+            <p class="text-center text-lg mb-8 max-w-3xl mx-auto">This interactive section allows you to explore each of the seven Core Operating Gifts in detail. Click on a COG to learn about its definition, the scientific theories that support it, and its potential impact on individuals and organizations. Discover the unique strengths each gift offers.</p>
+            <div id="cog-buttons" class="flex flex-wrap justify-center gap-3 mb-8">
+                </div>
+            <div id="cog-details-container" class="card min-h-[300px]">
+                <h3 id="cog-name" class="text-2xl font-semibold accent-teal mb-2">Select a COG to learn more</h3>
+                <p id="cog-definition" class="mb-4"></p>
+                <div id="cog-impact-section" class="hidden">
+                    <h4 class="font-semibold text-lg mb-1">Key Potential Impact:</h4>
+                    <p id="cog-impact" class="mb-4"></p>
+                </div>
+                <div id="cog-science-section" class="hidden">
+                    <h4 class="font-semibold text-lg mb-1">Scientific Alignment:</h4>
+                    <p id="cog-science" class="text-sm"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="comparison" class="content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">Why COGs are the Superior Choice: A Comparative Analysis</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">This section provides a direct comparison between the Core Operating Gifts framework and traditional personality assessments. The table and chart highlight key differentiators, demonstrating COGs' superior capabilities in addressing the complex demands of modern organizations and fostering truly dynamic talent development.</p>
+            <div class="grid lg:grid-cols-2 gap-8 items-start">
+                <div>
+                    <h3 class="mb-4">Feature Comparison</h3>
+                    <div class="overflow-x-auto">
+                        <table class="comparison-table min-w-full">
+                            <thead>
+                                <tr>
+                                    <th>Feature / Capability</th>
+                                    <th>Traditional Assessments</th>
+                                    <th>Core Operating Gifts (COGs)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="comparison-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-8 lg:mt-0">
+                     <h3 class="mb-4 text-center lg:text-left">Visualizing the Difference</h3>
+                    <div class="chart-container bg-white p-4 rounded-lg shadow-md">
+                        <canvas id="cogsComparisonChart"></canvas>
+                    </div>
+                    <p class="text-sm text-center mt-2">This radar chart visually contrasts COGs with traditional models across key developmental dimensions. Higher scores indicate a stronger emphasis or capability in that area.</p>
+                </div>
+            </div>
+             <div class="mt-12 card">
+                <h3 class="accent-teal">The Strategic Edge of COGs</h3>
+                <p>The comparison highlights a fundamental difference: traditional models are often static and typological, while COGs are dynamic and growth-oriented. In today's VUCA world, fixed labels become obsolete. COGs are inherently designed for a dynamic environment, positioning them as a future-ready solution for talent development and organizational resilience. They shift focus from merely describing traits to providing actionable insights for strategic interventions, linking assessment to measurable business impact.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="applications" class="bg-warm-neutral-medium content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">Strategic Applications: Driving Value Across the Organization</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">The COG framework is a versatile tool with wide-ranging applications. This section illustrates how COGs can be strategically implemented across various organizational functions to drive systemic value, enhance performance, and foster a thriving, future-ready workforce.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card">
+                    <h3 class="accent-teal">Talent Growth & Development</h3>
+                    <p>Design tailored coaching, personalized development plans, and targeted training to build specific COGs, creating a cohesive talent ecosystem.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Leadership Effectiveness</h3>
+                    <p>Nurture future leaders, strengthen leadership presence, and ensure a robust pipeline of confident, strategically-minded individuals.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Team Performance</h3>
+                    <p>Build high-trust teams, improve cross-functional collaboration, resolve conflicts, and create psychologically safe environments for innovation.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Culture Alignment</h3>
+                    <p>Foster a purpose-driven culture, increase employee satisfaction and commitment, reduce turnover, and build an engaged workforce.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Innovation & Agility</h3>
+                    <p>Cultivate a growth mindset, enhance collective problem-solving, improve strategic foresight, and enable faster responses to market changes.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Diversity, Equity & Inclusion</h3>
+                    <p>Build a more inclusive workplace by fostering emotional attunement, understanding diverse perspectives, and cultivating compassionate connections.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="conclusion" class="content-section">
+        <div class="container mx-auto px-6 text-center">
+            <h2>Partnering for Authentic Growth, Culture Alignment, and Innovation at Scale</h2>
+            <p class="text-lg mb-8 max-w-3xl mx-auto">The COG framework offers a paradigm shift in human capital development. By embedding COGs into your talent strategy, you invest in a more personalized, emotionally intelligent, and future-ready workforce capable of driving significant organizational benefits and sustainable competitive advantage.</p>
+            <div class="card max-w-2xl mx-auto mb-8">
+                <h3 class="accent-teal">Key Takeaways:</h3>
+                <ul class="list-disc list-inside text-left space-y-2">
+                    <li>COGs foster <span class="font-semibold">Authentic Growth</span> beyond fixed typologies.</li>
+                    <li>They drive deep <span class="font-semibold">Culture Alignment</span> by connecting purpose with performance.</li>
+                    <li>COGs fuel <span class="font-semibold">Innovation at Scale</span> by enhancing agility and problem-solving.</li>
+                </ul>
+            </div>
+            <p class="text-lg mb-8 max-w-3xl mx-auto">Ready to transform your organization's approach to talent? COGs are not just a solution; they are a catalyst for continuous evolution and excellence.</p>
+            <button class="bg-accent-teal text-white font-semibold py-4 px-10 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 text-xl">Learn More & Partner With Us</button>
+        </div>
+    </section>
+
+    <footer class="bg-warm-neutral-dark text-warm-neutral-light py-8 text-center">
+        <div class="container mx-auto px-6">
+            <p>&copy; <span id="currentYear"></span> Core Operating Gifts Framework. All rights reserved.</p>
+            <p class="text-sm">Empowering Potential, Driving Transformation.</p>
+        </div>
+    </footer>
+
+    <script>
+        const cogsData = [
+            {
+                name: "Security & Stability",
+                definition: "A profound sense of groundedness, inner safety, and psychological resilience. It represents an individual's capacity to maintain composure and stability amidst challenges.",
+                impact: "Improves emotional regulation and decision-making under pressure; Increases engagement, trust, and retention in teams. Forms the foundation for psychological safety and high-performance.",
+                science: "Aligns with Self-Determination Theory (autonomy, competence, relatedness foster motivation), Polyvagal Theory (neuroception of safety impacts emotional stability), and Trait Resilience (flexible adaptation to stress)."
+            },
+            {
+                name: "Creativity & Adaptability",
+                definition: "The ability to flexibly respond to change with novel ideas, embracing new perspectives and innovative solutions.",
+                impact: "Fuels innovation and agile responses in dynamic environments; Enhances problem-solving and creative leadership. Embeds a growth mindset for continuous, organization-wide innovation.",
+                science: "Supported by Cognitive Flexibility (switching cognitive sets), Divergent Thinking (generating multiple unique solutions), and Growth Mindset (talents can be developed)."
+            },
+            {
+                name: "Confidence & Leadership",
+                definition: "Self-assurance and the inherent drive to influence others and take initiative.",
+                impact: "Enables talent to scale influence and inspire teams; Critical for succession, motivation, and ownership in leadership pipelines. Creates a ripple effect, empowering others to lead.",
+                science: "Aligns with Self-Efficacy (belief in capabilities to achieve outcomes) and Transformational Leadership (idealized influence, inspirational motivation, intellectual stimulation, individualized consideration)."
+            },
+            {
+                name: "Communication & Expression",
+                definition: "Clarity in conveying thoughts, the practice of active listening, and the effective expression of emotions.",
+                impact: "Reduces miscommunication, increases collaboration and belonging; Strengthens leadership presence and employee relations. Addresses costly inefficiencies from poor communication.",
+                science: "Supported by Emotional Intelligence (recognizing and managing emotions) and Interpersonal Effectiveness (assertiveness, self-respect, healthy relationships)."
+            },
+            {
+                name: "Insight & Strategic Thinking",
+                definition: "The capacity for vision, astute pattern recognition, and the ability to synthesize both intuitive and logical reasoning for effective decision-making.",
+                impact: "Enhances clarity in planning and organizational design; Critical for data-informed decisions and foresight. Equips leaders to translate information into actionable strategy.",
+                science: "Aligns with Dual Process Theory (intuitive System 1 and analytical System 2 thinking) and Metacognition (knowledge and regulation of one's own cognitive processes)."
+            },
+            {
+                name: "Empathy & Relationships",
+                definition: "Emotional attunement, the cultivation of relational trust, and the capacity for compassionate connection with others.",
+                impact: "Drives trust, inclusion, and emotional safety in teams; Essential for DEI efforts, coaching, and client relationships. Fosters inclusive environments and stronger customer loyalty.",
+                science: "Supported by Theory of Mind (attributing mental states to self and others) and Attachment Theory (secure relationships contribute to trust and empathy)."
+            },
+            {
+                name: "Purpose & Alignment",
+                definition: "Living in accordance with personal values and actively pursuing a meaningful direction in life and work.",
+                impact: "Increases resilience, motivation, and long-term retention; Drives culture alignment and authentic leadership. Fosters intrinsic commitment and belonging, reducing recruitment costs.",
+                science: "Aligns with Existential Psychology (Frankl's view on purpose and well-being) and Value Congruence (alignment of personal/organizational values leads to higher satisfaction)."
+            }
+        ];
+
+        const comparisonTableData = [
+            { feature: "Model Type", traditional: "Typological / Trait-based", cogs: "Dynamic Capability-based" },
+            { feature: "Developmental Orientation", traditional: "Static (you are a type)", cogs: "Growth-oriented (skills can evolve)" },
+            { feature: "Emotional Integration", traditional: "Minimal or secondary", cogs: "Central to framework via Emotional Centers" },
+            { feature: "Context Sensitivity", traditional: "Low – assumes fixed behavior", cogs: "High – behavior shaped by context and development" },
+            { feature: "Interpersonal Impact Modeling", traditional: "Limited", cogs: "Embedded (e.g., empathy, communication, leadership)" },
+            { feature: "Scientific Grounding", traditional: "Varies (Big Five strong, MBTI weaker)", cogs: "Grounded in validated psychological theories" },
+            { feature: "Practical Application", traditional: "General awareness / team styles", cogs: "Talent growth, leadership coaching, cultural fit" },
+            { feature: "Organizational Relevance", traditional: "Limited to type mapping", cogs: "Strategy, engagement, succession, well-being" }
+        ];
+
+        // Populate COG buttons and details
+        const cogButtonsContainer = document.getElementById('cog-buttons');
+        const cogNameEl = document.getElementById('cog-name');
+        const cogDefinitionEl = document.getElementById('cog-definition');
+        const cogImpactEl = document.getElementById('cog-impact');
+        const cogScienceEl = document.getElementById('cog-science');
+        const cogImpactSection = document.getElementById('cog-impact-section');
+        const cogScienceSection = document.getElementById('cog-science-section');
+
+        cogsData.forEach((cog, index) => {
+            const button = document.createElement('button');
+            button.className = 'cog-button bg-white text-accent-teal font-semibold py-2 px-4 rounded-lg shadow hover:bg-accent-teal hover:text-white focus:outline-none';
+            button.textContent = cog.name;
+            button.onclick = () => {
+                cogNameEl.textContent = cog.name;
+                cogDefinitionEl.textContent = cog.definition;
+                cogImpactEl.textContent = cog.impact;
+                cogScienceEl.textContent = cog.science;
+                cogImpactSection.classList.remove('hidden');
+                cogScienceSection.classList.remove('hidden');
+
+                document.querySelectorAll('#cog-buttons .cog-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            };
+            cogButtonsContainer.appendChild(button);
+            if (index === 0) button.click(); // Select first COG by default
+        });
+
+        // Populate Comparison Table
+        const comparisonTableBody = document.getElementById('comparison-table-body');
+        comparisonTableData.forEach(item => {
+            const row = comparisonTableBody.insertRow();
+            row.insertCell().textContent = item.feature;
+            row.insertCell().textContent = item.traditional;
+            row.insertCell().textContent = item.cogs;
+        });
+
+        // Radar Chart
+        const ctx = document.getElementById('cogsComparisonChart').getContext('2d');
+        const radarChartLabels = comparisonTableData.map(item => item.feature.split(' ').map(word => word.length > 10 ? word.substring(0,8)+'...' : word).join(' '));
+        
+        // Simplified scoring for visualization: COGs get higher scores
+        // These scores are illustrative for the chart's purpose
+        const cogsScores = [0.9, 0.95, 0.9, 0.85, 0.9, 0.95, 0.9, 0.95]; // Higher scores for COGs
+        const traditionalScores = [0.3, 0.2, 0.25, 0.3, 0.35, 0.5, 0.4, 0.3]; // Lower scores for Traditional
+
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: radarChartLabels,
+                datasets: [{
+                    label: 'Core Operating Gifts (COGs)',
+                    data: cogsScores,
+                    fill: true,
+                    backgroundColor: 'rgba(79, 209, 197, 0.2)', // accent-teal with alpha
+                    borderColor: 'rgb(79, 209, 197)',
+                    pointBackgroundColor: 'rgb(79, 209, 197)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(79, 209, 197)'
+                }, {
+                    label: 'Traditional Assessments',
+                    data: traditionalScores,
+                    fill: true,
+                    backgroundColor: 'rgba(160, 174, 192, 0.2)', // gray-500 with alpha
+                    borderColor: 'rgb(160, 174, 192)',
+                    pointBackgroundColor: 'rgb(160, 174, 192)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(160, 174, 192)'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                elements: {
+                    line: {
+                        borderWidth: 3
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 1,
+                        ticks: {
+                            stepSize: 0.2,
+                            backdropColor: 'rgba(255,255,255,0.75)', // Make ticks more readable
+                            font: { size: 8 }
+                        },
+                        pointLabels: {
+                           font: { size: 10 },
+                           callback: function(label) { // Manual label wrapping
+                                const maxLineLength = 15;
+                                const words = label.split(' ');
+                                let currentLine = '';
+                                const lines = [];
+                                words.forEach(word => {
+                                    if ((currentLine + word).length > maxLineLength) {
+                                        lines.push(currentLine.trim());
+                                        currentLine = '';
+                                    }
+                                    currentLine += word + ' ';
+                                });
+                                lines.push(currentLine.trim());
+                                return lines;
+                           }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.r !== null) {
+                                    label += context.parsed.r.toFixed(2);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Smooth scrolling for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+                // For mobile menu, close after click
+                if(document.getElementById('mobile-menu').classList.contains('hidden') === false) {
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+                // Active link styling
+                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                if (!this.classList.contains('block')) { // Exclude mobile menu items from this specific active styling
+                    this.classList.add('active');
+                }
+
+            });
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('nav a.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 100) { // Adjusted offset for better accuracy
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+
+    </script>
+</body>
+</html>
