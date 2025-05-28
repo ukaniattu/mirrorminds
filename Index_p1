@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirrorMinds - Operationalizing Emotional Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices:
+        - Report Info: Company/Platform/Use Cases -> Goal: Inform & Engage -> Viz/Presentation: Text blocks, styled cards, simple lists (HTML/Tailwind) -> Interaction: Static display, clear visual hierarchy. -> Justification: For a landing page, clear, concise text and visually appealing sections are key to conveying information quickly and effectively without overwhelming the user.
+        - Report Info: Link to COGs -> Goal: Navigate -> Viz/Presentation: Prominent button/card -> Interaction: Clickable link to external HTML file. -> Justification: Direct navigation is essential for users to explore the foundational COGs framework.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .bg-warm-neutral-light { background-color: #F5F5F5; }
+        .bg-warm-neutral-medium { background-color: #EDEAE5; }
+        .text-warm-neutral-dark { color: #333333; }
+        .accent-teal { color: #4FD1C5; }
+        .bg-accent-teal { background-color: #4FD1C5; }
+        .border-accent-teal { border-color: #4FD1C5; }
+        .nav-link {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #4FD1C5;
+            color: white;
+        }
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .content-section {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+    </style>
+</head>
+<body class="bg-warm-neutral-light text-warm-neutral-dark">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold accent-teal">MirrorMinds</a>
+            <div class="hidden md:flex space-x-4">
+                <a href="#about" class="nav-link">About Us</a>
+                <a href="#platform" class="nav-link">Our Platform</a>
+                <a href="#use-cases" class="nav-link">Use Cases</a>
+                <a href="#cogs-foundation" class="nav-link">COGs Foundation</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-warm-neutral-dark focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <a href="#about" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">About Us</a>
+            <a href="#platform" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Our Platform</a>
+            <a href="#use-cases" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Use Cases</a>
+            <a href="#cogs-foundation" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">COGs Foundation</a>
+            <a href="#contact" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Contact</a>
+        </div>
+    </nav>
+
+    <header class="bg-warm-neutral-medium content-section text-center">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">MirrorMinds: <span class="accent-teal">Operationalizing Emotional Intelligence</span> for a Smarter Future</h1>
+            <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">We are building a cutting-edge platform that captures, processes, and delivers emotional insights to empower individuals and organizations.</p>
+            <a href="#platform" class="bg-accent-teal text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 text-lg">Discover Our Platform</a>
+        </div>
+    </header>
+
+    <section id="about" class="content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">About MirrorMinds</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">MirrorMinds is at the forefront of human potential technology. We believe that understanding and leveraging emotional intelligence is key to unlocking unprecedented levels of performance, well-being, and collaboration in any environment.</p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="accent-teal">Our Vision</h3>
+                    <p>To create a world where emotional insights are actionable, accessible, and integrated into daily operations, fostering a more empathetic, productive, and resilient society.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Our Mission</h3>
+                    <p>To develop and deploy a revolutionary platform that operationalizes emotional intelligence, enabling individuals and organizations to thrive through deeper self-awareness and interpersonal understanding.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="platform" class="bg-warm-neutral-medium content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">Our Platform: The Engine of Emotional Intelligence</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">MirrorMinds offers a comprehensive platform designed to bring emotional intelligence from theory to practice. Our proprietary technology handles the entire lifecycle of emotional insights.</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card text-center">
+                    <div class="text-5xl accent-teal mb-4">
+                        <span role="img" aria-label="Capture">📥</span>
+                    </div>
+                    <h3 class="accent-teal">Capture</h3>
+                    <p>Advanced data collection methods to ethically and effectively gather emotional signals from various interactions and contexts.</p>
+                </div>
+                <div class="card text-center">
+                    <div class="text-5xl accent-teal mb-4">
+                        <span role="img" aria-label="Process">⚙️</span>
+                    </div>
+                    <h3 class="accent-teal">Process</h3>
+                    <p>Sophisticated AI and analytical models to interpret complex emotional data, transforming raw signals into meaningful insights.</p>
+                </div>
+                <div class="card text-center">
+                    <div class="text-5xl accent-teal mb-4">
+                        <span role="img" aria-label="Deliver">🚀</span>
+                    </div>
+                    <h3 class="accent-teal">Deliver</h3>
+                    <p>Actionable recommendations and personalized feedback delivered through intuitive dashboards and integrations, empowering real-time application.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="use-cases" class="content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">Transformative Use Cases for Every Sector</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">Our platform's emotional insights are versatile and can be applied across numerous domains to drive significant improvements.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card">
+                    <h3 class="accent-teal">Leadership Development</h3>
+                    <p>Provide leaders with real-time feedback on their emotional impact and communication styles to foster more effective and empathetic leadership.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Team Collaboration</h3>
+                    <p>Enhance team dynamics by identifying emotional friction points and promoting psychological safety, leading to increased productivity and innovation.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Customer Experience</h3>
+                    <p>Understand customer sentiment in real-time to personalize interactions, improve service quality, and build stronger customer loyalty.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Employee Well-being</h3>
+                    <p>Monitor and support employee emotional health, identifying signs of stress or disengagement to proactively offer support and resources.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Sales & Negotiation</h3>
+                    <p>Equip sales teams with insights into client emotional states to tailor pitches, build rapport, and close deals more effectively.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Education & Training</h3>
+                    <p>Adapt teaching methods based on student engagement and emotional responses, creating more effective and personalized learning experiences.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cogs-foundation" class="bg-warm-neutral-medium content-section text-center">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">The Core Operating Gifts (COGs): Our Foundational Framework</h2>
+            <p class="text-lg mb-8 max-w-3xl mx-auto">At the heart of MirrorMinds' platform lies the revolutionary Core Operating Gifts (COGs) framework. COGs provide a dynamic, strengths-based understanding of innate human capabilities, allowing us to operationalize emotional intelligence with unparalleled depth and precision.</p>
+            <p class="text-lg mb-12 max-w-3xl mx-auto">Explore how COGs transcend traditional assessments, driving authentic growth, culture alignment, and innovation at scale.</p>
+            <a href="cogs_interactive_spa.html" class="bg-accent-teal text-white font-semibold py-4 px-10 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 text-xl">Discover the COGs Framework</a>
+        </div>
+    </section>
+
+    <section id="contact" class="content-section text-center">
+        <div class="container mx-auto px-6">
+            <h2>Ready to Transform Your Organization?</h2>
+            <p class="text-lg mb-8 max-w-3xl mx-auto">Partner with MirrorMinds to operationalize emotional intelligence and unlock the full potential of your workforce. Contact us today to learn more.</p>
+            <a href="mailto:hello@mirrorminds.ai" class="bg-accent-teal text-white font-semibold py-4 px-10 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 text-xl">Get in Touch</a>
+        </div>
+    </section>
+
+    <footer class="bg-warm-neutral-dark text-warm-neutral-light py-8 text-center">
+        <div class="container mx-auto px-6">
+            <p>&copy; <span id="currentYear"></span> MirrorMinds. All rights reserved.</p>
+            <p class="text-sm">Operationalizing Emotional Intelligence for a Smarter Future.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+                if(document.getElementById('mobile-menu').classList.contains('hidden') === false) {
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                if (!this.classList.contains('block')) {
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('nav a.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
