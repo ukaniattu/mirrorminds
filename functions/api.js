@@ -1,4 +1,4 @@
-// functions/api/gemini.js (Place this code inside your 'gemini.js' file)
+// functions/api.js (Place this code inside your 'gemini.js' file)
 
 export async function onRequest(context) {
   // Pages Functions provide 'request' and 'env' via the 'context' object
