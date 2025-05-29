@@ -380,8 +380,8 @@ COGs for reference:
 Your response should be a concise paragraph or two, directly addressing the scenario through the lens of COGs.` }] });
 
                 const payload = { contents: chatHistory };
-                const apiKey = ""; 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+//              const apiKey = ""; 
+                const apiUrl = `/api/gemini`;
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -462,8 +462,8 @@ COGs for reference:
 Your response should be a concise paragraph or two, directly explaining MirrorMinds' solution.` }] });
 
                     const payload = { contents: chatHistory };
-                    const apiKey = ""; 
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+//                    const apiKey = ""; 
+                    const apiUrl = `/api/gemini`;
 
                     const response = await fetch(apiUrl, {
                         method: 'POST',
