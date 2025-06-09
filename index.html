@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MirrorMinds - Operationalizing Emotional Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Visualization & Content Choices:
-        - Report Info: Company/Platform/Use Cases -> Goal: Inform & Engage -> Viz/Presentation: Text blocks, styled cards, simple lists (HTML/Tailwind) -> Interaction: Static display, clear visual hierarchy. -> Justification: For a landing page, clear, concise text and visually appealing sections are key to conveying information quickly and effectively without overwhelming the user.
-        - Report Info: Link to COGs -> Goal: Navigate -> Viz/Presentation: Prominent button/card -> Interaction: Clickable link to external HTML file. -> Justification: Direct navigation is essential for users to explore the foundational COGs framework.
-        - New Feature: LLM-powered COG Insights -> Goal: Provide interactive insight into COGs application -> Viz/Presentation: Textarea for input, button to trigger LLM, div for output, loading spinner (HTML/JS/Tailwind) -> Interaction: User types, clicks button, AI generates analysis -> Justification: Directly demonstrates the "operationalizing emotional intelligence" aspect using the COGs framework, providing a delightful and practical example of the platform's potential.
-        - New Feature: Use Case AI Suggestion -> Goal: Show practical application of COGs in specific use cases -> Viz/Presentation: Button to reveal input/output area within each card, textarea for challenge, button to trigger LLM, div for output, loading spinner (HTML/JS/Tailwind) -> Interaction: User selects use case, inputs challenge, AI generates tailored suggestion -> Justification: Provides a direct, interactive demonstration of how MirrorMinds' AI can solve real-world problems within each stated use case, enhancing engagement and clarity.
-        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -30,6 +27,15 @@
         .nav-link:hover, .nav-link.active {
             background-color: #4FD1C5;
             color: white;
+        }
+        /* Style for external product link to ensure it doesn't get treated as active by hash logic on this page */
+        .nav-link[href="products.html"]:hover {
+            background-color: #4FD1C5;
+            color: white;
+        }
+         .nav-link[href="products.html"].active { /* Override active for external product link if it somehow gets it */
+            background-color: transparent;
+            color: initial; /* Or your default nav link color: #333333 */
         }
         h2 {
             font-size: 1.875rem;
@@ -51,6 +57,12 @@
             padding: 1.5rem;
             box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Ensure cards in a row can align content */
+        }
+        .card > *:last-child {
+            margin-top: auto; /* Pushes last element (e.g. button) to bottom */
         }
         .card:hover {
             transform: translateY(-5px);
@@ -71,20 +83,56 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #EDEAE5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4FD1C5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3dbbab;
+        }
+         /* Message Box Styles */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            max-width: 300px;
+        }
+        .message-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .message-box.error {
+            background-color: #ef4444; /* red-500 */
+        }
     </style>
 </head>
 <body class="bg-warm-neutral-light text-warm-neutral-dark">
 
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="#" class="flex items-center space-x-2">
-                <img src="mirrorminds_logo.jpg" onerror="this.onerror=null;this.src='https://placehold.co/40x40/EDEAE5/333333?text=MM';" alt="MirrorMinds Logo" class="h-10 w-10 rounded-full">
+            <a href="#home" class="flex items-center space-x-2"> <img src="mirrorminds_logo.jpg" onerror="this.onerror=null;this.src='https://placehold.co/40x40/EDEAE5/333333?text=MM';" alt="MirrorMinds Logo" class="h-10 w-10 rounded-full">
                 <span class="text-2xl font-bold accent-teal">MirrorMinds</span>
             </a>
-            <div class="hidden md:flex space-x-4">
-                <a href="#about" class="nav-link">About Us</a>
+            <div class="hidden md:flex space-x-2"> <a href="#about" class="nav-link">About Us</a>
                 <a href="#platform" class="nav-link">Our Platform</a>
-                <a href="#use-cases" class="nav-link">Use Cases</a>
+                <a href="products.html" class="nav-link">Products</a> <a href="#use-cases" class="nav-link">Use Cases</a>
                 <a href="#cogs-foundation" class="nav-link">COGs Foundation</a>
                 <a href="#contact" class="nav-link">Contact</a>
             </div>
@@ -93,16 +141,15 @@
             </button>
         </div>
         <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
-            <a href="#about" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">About Us</a>
-            <a href="#platform" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Our Platform</a>
-            <a href="#use-cases" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Use Cases</a>
-            <a href="#cogs-foundation" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">COGs Foundation</a>
-            <a href="#contact" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Contact</a>
+            <a href="#about" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">About Us</a>
+            <a href="#platform" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Our Platform</a>
+            <a href="products.html" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Products</a> <a href="#use-cases" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Use Cases</a>
+            <a href="#cogs-foundation" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">COGs Foundation</a>
+            <a href="#contact" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Contact</a>
         </div>
     </nav>
 
-    <header class="bg-warm-neutral-medium content-section text-center">
-        <div class="container mx-auto px-6">
+    <header id="home" class="bg-warm-neutral-medium content-section text-center"> <div class="container mx-auto px-6">
             <img src="mirrorminds_logo.jpg" onerror="this.onerror=null;this.src='https://placehold.co/100x100/EDEAE5/333333?text=MM';" alt="MirrorMinds Logo" class="h-24 w-24 mx-auto mb-6 rounded-full">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">MirrorMinds: <span class="accent-teal">Operationalizing Emotional Intelligence</span> for a Smarter Future</h1>
             <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">We are building a cutting-edge platform that captures, processes, and delivers emotional insights to empower individuals and organizations.</p>
@@ -133,22 +180,22 @@
             <p class="text-center text-lg mb-12 max-w-3xl mx-auto">MirrorMinds offers a comprehensive platform designed to bring emotional intelligence from theory to practice. Our proprietary technology handles the entire lifecycle of emotional insights.</p>
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="card text-center">
-                    <div class="text-5xl accent-teal mb-4">
-                        <span role="img" aria-label="Capture">📥</span>
+                    <div class="text-5xl accent-teal mb-4 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                     </div>
                     <h3 class="accent-teal">Capture</h3>
                     <p>Advanced data collection methods to ethically and effectively gather emotional signals from various interactions and contexts.</p>
                 </div>
                 <div class="card text-center">
-                    <div class="text-5xl accent-teal mb-4">
-                        <span role="img" aria-label="Process">⚙️</span>
+                    <div class="text-5xl accent-teal mb-4 mx-auto">
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg>
                     </div>
                     <h3 class="accent-teal">Process</h3>
                     <p>Sophisticated AI and analytical models to interpret complex emotional data, transforming raw signals into meaningful insights.</p>
                 </div>
                 <div class="card text-center">
-                    <div class="text-5xl accent-teal mb-4">
-                        <span role="img" aria-label="Deliver">🚀</span>
+                    <div class="text-5xl accent-teal mb-4 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>
                     </div>
                     <h3 class="accent-teal">Deliver</h3>
                     <p>Actionable recommendations and personalized feedback delivered through intuitive dashboards and integrations, empowering real-time application.</p>
@@ -272,12 +319,10 @@
         </div>
     </section>
 
-    <section id="contact" class="content-section text-center">
-        <div class="container mx-auto px-6">
-            <h2>Ready to Transform Your Organization?</h2>
-            <p class="text-lg mb-8 max-w-3xl mx-auto">Partner with MirrorMinds to operationalize emotional intelligence and unlock the full potential of your workforce. Contact us today to learn more.</p>
+    <section id="contact" class="content-section text-center"> <div class="container mx-auto px-6">
+            <h2 class="text-warm-neutral-dark">Ready to Transform Your Organization?</h2> <p class="text-lg mb-8 max-w-3xl mx-auto text-gray-700">Partner with MirrorMinds to operationalize emotional intelligence and unlock the full potential of your workforce. Contact us today to learn more.</p>
             <a href="mailto:hello@mirrorminds.ai" class="bg-accent-teal text-white font-semibold py-4 px-10 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 text-xl">Get in Touch</a>
-        </div>
+            </div>
     </section>
 
     <footer class="bg-warm-neutral-dark text-warm-neutral-light py-8 text-center">
@@ -287,84 +332,117 @@
         </div>
     </footer>
 
+    <div id="messageBoxContainer"></div>
+
     <script>
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                
-                if (targetId === '#') {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
-                }
-                
-                if(document.getElementById('mobile-menu').classList.contains('hidden') === false) {
-                    document.getElementById('mobile-menu').classList.add('hidden');
-                }
-                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-                if (!this.classList.contains('block')) {
-                    this.classList.add('active');
-                }
-            });
-        });
-        
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('nav a.nav-link');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 100) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').substring(1) === current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-        // LLM Integration Logic for COG Insights
-        const cogInput = document.getElementById('cog-input');
-        const getCogInsightsButton = document.getElementById('get-cog-insights-button');
-        const cogLoadingSpinner = document.getElementById('cog-loading-spinner');
-        const cogOutput = document.getElementById('cog-output');
-        const cogOutputText = document.getElementById('cog-output-text');
-
-        getCogInsightsButton.addEventListener('click', async () => {
-            const prompt = cogInput.value.trim();
-            if (!prompt) {
-                cogOutputText.textContent = "Please enter a scenario to get insights.";
-                cogOutput.classList.remove('hidden');
-                return;
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current year in footer
+            const currentYearSpan = document.getElementById('currentYear');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
             }
 
-            cogLoadingSpinner.classList.remove('hidden');
-            getCogInsightsButton.disabled = true;
-            cogOutput.classList.add('hidden');
-            cogOutputText.textContent = '';
+            // Mobile menu toggle
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (menuButton && mobileMenu) {
+                menuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
 
-            try {
-                let chatHistory = [];
-                chatHistory.push({ role: "user", parts: [{ text: `Analyze the following scenario and provide insights based on the Core Operating Gifts (COGs) framework. Focus on identifying which COGs are most relevant or could be developed to address the scenario. Explain your reasoning.
+            // Smooth scrolling for internal links & close mobile menu
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href === "#") { // Handles cases like <a href="#"> for top of page
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        const targetElement = document.querySelector(href);
+                        if (targetElement) {
+                            e.preventDefault();
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                    // Close mobile menu if open
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Active Nav Link Highlighting on scroll and load
+            const navLinks = document.querySelectorAll('nav .nav-link:not([href="products.html"])'); // Exclude external products link
+            const mobileNavLinksJS = document.querySelectorAll('#mobile-menu .mobile-nav-link:not([href="products.html"])');
+            
+            function updateActiveLinks() {
+                let current = '';
+                document.querySelectorAll('section[id]').forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 120) { // Adjusted offset for better accuracy
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                // Handle case when scrolled to the very top (for #home)
+                if (window.pageYOffset < document.querySelector('#about').offsetTop - 120) {
+                    current = 'home';
+                }
+
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+                mobileNavLinksJS.forEach(link => {
+                    link.classList.remove('bg-accent-teal', 'text-white'); // Assuming these are active styles for mobile
+                     if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('bg-accent-teal', 'text-white');
+                    }
+                });
+
+                // Default to #home if no section is matched (e.g., at the very top before #about)
+                 if (!current && navLinks.length > 0) {
+                    const homeLink = document.querySelector('.nav-link[href="#home"]');
+                    if (homeLink) homeLink.classList.add('active');
+                     const mobileHomeLink = document.querySelector('.mobile-nav-link[href="#home"]');
+                    if (mobileHomeLink) mobileHomeLink.classList.add('bg-accent-teal', 'text-white');
+                }
+            }
+            window.addEventListener('scroll', updateActiveLinks);
+            window.addEventListener('load', updateActiveLinks); // Also run on load
+            updateActiveLinks(); // Initial call
+
+
+            // LLM Integration Logic for COG Insights
+            const cogInput = document.getElementById('cog-input');
+            const getCogInsightsButton = document.getElementById('get-cog-insights-button');
+            const cogLoadingSpinner = document.getElementById('cog-loading-spinner');
+            const cogOutput = document.getElementById('cog-output');
+            const cogOutputText = document.getElementById('cog-output-text');
+
+            if (getCogInsightsButton) {
+                getCogInsightsButton.addEventListener('click', async () => {
+                    const prompt = cogInput.value.trim();
+                    if (!prompt) {
+                        cogOutputText.textContent = "Please enter a scenario to get insights.";
+                        cogOutput.classList.remove('hidden');
+                        return;
+                    }
+
+                    cogLoadingSpinner.classList.remove('hidden');
+                    getCogInsightsButton.disabled = true;
+                    cogOutput.classList.add('hidden');
+                    cogOutputText.textContent = '';
+
+                    try {
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: `Analyze the following scenario and provide insights based on the Core Operating Gifts (COGs) framework. Focus on identifying which COGs are most relevant or could be developed to address the scenario. Explain your reasoning.
 
 Scenario: "${prompt}"
 
@@ -379,74 +457,83 @@ COGs for reference:
 
 Your response should be a concise paragraph or two, directly addressing the scenario through the lens of COGs.` }] });
 
-                const payload = { contents: chatHistory };
-//              const apiKey = ""; 
-                const apiUrl = `/api`;
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // API key will be injected by the environment if needed
+                        const apiUrl = `/api`; // Using the relative path from the original file
 
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({ error: { message: "Unknown API error" } }));
+                            console.error("API Error:", errorData);
+                            throw new Error(`API request failed: ${response.status} ${response.statusText}. ${errorData?.error?.message || ''}`);
+                        }
+
+                        const result = await response.json();
+
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            cogOutputText.textContent = text;
+                        } else {
+                            throw new Error("Received an unexpected response from the AI. No suggestion found.");
+                        }
+                    } catch (error) {
+                        console.error('Error calling LLM API:', error);
+                        cogOutputText.textContent = `Error: ${error.message}. Please try again later.`;
+                    } finally {
+                        cogLoadingSpinner.classList.add('hidden');
+                        getCogInsightsButton.disabled = false;
+                        cogOutput.classList.remove('hidden');
+                    }
                 });
-
-                const result = await response.json();
-
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const text = result.candidates[0].content.parts[0].text;
-                    cogOutputText.textContent = text;
-                    cogOutput.classList.remove('hidden');
-                } else {
-                    cogOutputText.textContent = "Could not generate insights. Please try again.";
-                    cogOutput.classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error('Error calling Gemini API:', error);
-                cogOutputText.textContent = "An error occurred while fetching insights. Please try again later.";
-                cogOutput.classList.remove('hidden');
-            } finally {
-                cogLoadingSpinner.classList.add('hidden');
-                getCogInsightsButton.disabled = false;
             }
-        });
 
-        // LLM Integration Logic for Use Case Suggestions
-        document.querySelectorAll('.get-ai-suggestion-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const suggestionArea = button.nextElementSibling;
-                suggestionArea.classList.toggle('hidden');
-                // Clear previous output when showing/hiding
-                suggestionArea.querySelector('.ai-output').classList.add('hidden');
-                suggestionArea.querySelector('.ai-output').textContent = '';
-                suggestionArea.querySelector('textarea').value = '';
+            // LLM Integration Logic for Use Case Suggestions
+            document.querySelectorAll('.get-ai-suggestion-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const suggestionArea = button.nextElementSibling;
+                    suggestionArea.classList.toggle('hidden');
+                    if (!suggestionArea.classList.contains('hidden')) {
+                        suggestionArea.querySelector('textarea').focus();
+                    }
+                    // Clear previous output when showing/hiding
+                    const outputDiv = suggestionArea.querySelector('.ai-output');
+                    outputDiv.classList.add('hidden');
+                    outputDiv.textContent = '';
+                    suggestionArea.querySelector('textarea').value = '';
+                });
             });
-        });
 
-        document.querySelectorAll('.generate-suggestion-button').forEach(button => {
-            button.addEventListener('click', async () => {
-                const card = button.closest('.card');
-                const useCase = card.dataset.useCase;
-                const textarea = button.previousElementSibling;
-                const prompt = textarea.value.trim();
-                const aiOutputDiv = button.nextElementSibling;
-                const loadingSpinner = button.querySelector('.loading-spinner');
+            document.querySelectorAll('.generate-suggestion-button').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const card = button.closest('.card');
+                    const useCase = card.dataset.useCase;
+                    const textarea = button.previousElementSibling;
+                    const prompt = textarea.value.trim();
+                    const aiOutputDiv = button.nextElementSibling;
+                    const loadingSpinner = button.querySelector('.loading-spinner');
 
-                if (!prompt) {
-                    aiOutputDiv.textContent = "Please describe a challenge to get a suggestion.";
-                    aiOutputDiv.classList.remove('hidden');
-                    return;
-                }
+                    if (!prompt) {
+                        aiOutputDiv.textContent = "Please describe a challenge to get a suggestion.";
+                        aiOutputDiv.classList.remove('hidden');
+                        return;
+                    }
 
-                loadingSpinner.classList.remove('hidden');
-                button.disabled = true;
-                textarea.disabled = true;
-                aiOutputDiv.classList.add('hidden');
-                aiOutputDiv.textContent = '';
+                    loadingSpinner.classList.remove('hidden');
+                    button.disabled = true;
+                    textarea.disabled = true;
+                    aiOutputDiv.classList.add('hidden');
+                    aiOutputDiv.textContent = '';
 
-                try {
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: `As MirrorMinds, a company operationalizing emotional intelligence using the Core Operating Gifts (COGs) framework, explain how our platform can help address the following challenge within the "${useCase}" use case. Be concise and focus on the value proposition.
+                    try {
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: `As MirrorMinds, a company operationalizing emotional intelligence using the Core Operating Gifts (COGs) framework, explain how our platform can help address the following challenge within the "${useCase}" use case. Be concise and focus on the value proposition.
 
 Challenge: "${prompt}"
 
@@ -461,38 +548,74 @@ COGs for reference:
 
 Your response should be a concise paragraph or two, directly explaining MirrorMinds' solution.` }] });
 
-                    const payload = { contents: chatHistory };
-//                    const apiKey = ""; 
-                    const apiUrl = `/api`;
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // API key will be injected by the environment if needed
+                        const apiUrl = `/api`; // Using the relative path from the original file
 
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
 
-                    const result = await response.json();
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({ error: { message: "Unknown API error" } }));
+                            console.error("API Error:", errorData);
+                            throw new Error(`API request failed: ${response.status} ${response.statusText}. ${errorData?.error?.message || ''}`);
+                        }
+                        
+                        const result = await response.json();
 
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
-                        aiOutputDiv.textContent = text;
-                        aiOutputDiv.classList.remove('hidden');
-                    } else {
-                        aiOutputDiv.textContent = "Could not generate suggestion. Please try again.";
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const text = result.candidates[0].content.parts[0].text;
+                            aiOutputDiv.textContent = text;
+                        } else {
+                           throw new Error("Received an unexpected response from the AI. No suggestion found.");
+                        }
+                    } catch (error) {
+                        console.error('Error calling LLM API:', error);
+                        aiOutputDiv.textContent = `Error: ${error.message}. Please try again later.`;
+                    } finally {
+                        loadingSpinner.classList.add('hidden');
+                        button.disabled = false;
+                        textarea.disabled = false;
                         aiOutputDiv.classList.remove('hidden');
                     }
-                } catch (error) {
-                    console.error('Error calling Gemini API:', error);
-                    aiOutputDiv.textContent = "An error occurred while fetching the suggestion. Please try again later.";
-                    aiOutputDiv.classList.remove('hidden');
-                } finally {
-                    loadingSpinner.classList.add('hidden');
-                    button.disabled = false;
-                    textarea.disabled = false;
-                }
+                });
             });
+
+            // Function to show temporary messages (like toasts/notifications)
+            function showTemporaryMessage(message, type = 'info', duration = 4000) {
+                const container = document.getElementById('messageBoxContainer');
+                if (!container) {
+                    // Create container if it doesn't exist
+                    const newContainer = document.createElement('div');
+                    newContainer.id = 'messageBoxContainer';
+                    document.body.appendChild(newContainer);
+                }
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message-box ${type}`; 
+                messageDiv.textContent = message;
+                
+                document.getElementById('messageBoxContainer').appendChild(messageDiv);
+
+                void messageDiv.offsetWidth; 
+
+                messageDiv.classList.add('show');
+
+                setTimeout(() => {
+                    messageDiv.classList.remove('show');
+                    setTimeout(() => {
+                        if (document.getElementById('messageBoxContainer').contains(messageDiv)) {
+                            document.getElementById('messageBoxContainer').removeChild(messageDiv);
+                        }
+                    }, 300); 
+                }, duration);
+            }
+
         });
     </script>
 </body>
