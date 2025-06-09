@@ -29,11 +29,11 @@
             color: white;
         }
         /* Style for external product link to ensure it doesn't get treated as active by hash logic on this page */
-        .nav-link[href="products.html"]:hover {
+        .nav-link[href="Products.html"]:hover {
             background-color: #4FD1C5;
             color: white;
         }
-         .nav-link[href="products.html"].active { /* Override active for external product link if it somehow gets it */
+         .nav-link[href="Products.html"].active { /* Override active for external product link if it somehow gets it */
             background-color: transparent;
             color: initial; /* Or your default nav link color: #333333 */
         }
@@ -132,7 +132,7 @@
             </a>
             <div class="hidden md:flex space-x-2"> <a href="#about" class="nav-link">About Us</a>
                 <a href="#platform" class="nav-link">Our Platform</a>
-                <a href="products.html" class="nav-link">Products</a> <a href="#use-cases" class="nav-link">Use Cases</a>
+                <a href="Products.html" class="nav-link">Products</a> <a href="#use-cases" class="nav-link">Use Cases</a>
                 <a href="#cogs-foundation" class="nav-link">COGs Foundation</a>
                 <a href="#contact" class="nav-link">Contact</a>
             </div>
@@ -143,7 +143,7 @@
         <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
             <a href="#about" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">About Us</a>
             <a href="#platform" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Our Platform</a>
-            <a href="products.html" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Products</a> <a href="#use-cases" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Use Cases</a>
+            <a href="Products.html" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Products</a> <a href="#use-cases" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Use Cases</a>
             <a href="#cogs-foundation" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">COGs Foundation</a>
             <a href="#contact" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white mobile-nav-link">Contact</a>
         </div>
@@ -375,8 +375,8 @@
             });
 
             // Active Nav Link Highlighting on scroll and load
-            const navLinks = document.querySelectorAll('nav .nav-link:not([href="products.html"])'); // Exclude external products link
-            const mobileNavLinksJS = document.querySelectorAll('#mobile-menu .mobile-nav-link:not([href="products.html"])');
+            const navLinks = document.querySelectorAll('nav .nav-link:not([href="Products.html"])'); // Exclude external products link
+            const mobileNavLinksJS = document.querySelectorAll('#mobile-menu .mobile-nav-link:not([href="Products.html"])');
             
             function updateActiveLinks() {
                 let current = '';
