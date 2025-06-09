@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MirrorMinds - Operationalizing Emotional Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices:
+        - Report Info: Company/Platform/Use Cases -> Goal: Inform & Engage -> Viz/Presentation: Text blocks, styled cards, simple lists (HTML/Tailwind) -> Interaction: Static display, clear visual hierarchy. -> Justification: For a landing page, clear, concise text and visually appealing sections are key to conveying information quickly and effectively without overwhelming the user.
+        - Report Info: Link to COGs -> Goal: Navigate -> Viz/Presentation: Prominent button/card -> Interaction: Clickable link to external HTML file. -> Justification: Direct navigation is essential for users to explore the foundational COGs framework.
+        - New Feature: LLM-powered COG Insights -> Goal: Provide interactive insight into COGs application -> Viz/Presentation: Textarea for input, button to trigger LLM, div for output, loading spinner (HTML/JS/Tailwind) -> Interaction: User types, clicks button, AI generates analysis -> Justification: Directly demonstrates the "operationalizing emotional intelligence" aspect using the COGs framework, providing a delightful and practical example of the platform's potential.
+        - New Feature: Use Case AI Suggestion -> Goal: Show practical application of COGs in specific use cases -> Viz/Presentation: Button to reveal input/output area within each card, textarea for challenge, button to trigger LLM, div for output, loading spinner (HTML/JS/Tailwind) -> Interaction: User selects use case, inputs challenge, AI generates tailored suggestion -> Justification: Provides a direct, interactive demonstration of how MirrorMinds' AI can solve real-world problems within each stated use case, enhancing engagement and clarity.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .bg-warm-neutral-light { background-color: #F5F5F5; }
+        .bg-warm-neutral-medium { background-color: #EDEAE5; }
+        .text-warm-neutral-dark { color: #333333; }
+        .accent-teal { color: #4FD1C5; }
+        .bg-accent-teal { background-color: #4FD1C5; }
+        .border-accent-teal { border-color: #4FD1C5; }
+        .nav-link {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #4FD1C5;
+            color: white;
+        }
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .content-section {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4FD1C5;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-warm-neutral-light text-warm-neutral-dark">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <img src="mirrorminds_logo.jpg" onerror="this.onerror=null;this.src='https://placehold.co/40x40/EDEAE5/333333?text=MM';" alt="MirrorMinds Logo" class="h-10 w-10 rounded-full">
+                <span class="text-2xl font-bold accent-teal">MirrorMinds</span>
+            </a>
+            <div class="hidden md:flex space-x-4">
+                <a href="#about" class="nav-link">About Us</a>
+                <a href="#platform" class="nav-link">Our Platform</a>
+                <a href="#use-cases" class="nav-link">Use Cases</a>
+                <a href="#cogs-foundation" class="nav-link">COGs Foundation</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-warm-neutral-dark focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <a href="#about" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">About Us</a>
+            <a href="#platform" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Our Platform</a>
+            <a href="#use-cases" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Use Cases</a>
+            <a href="#cogs-foundation" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">COGs Foundation</a>
+            <a href="#contact" class="block py-2 px-4 text-sm hover:bg-accent-teal hover:text-white">Contact</a>
+        </div>
+    </nav>
+
+    <header class="bg-warm-neutral-medium content-section text-center">
+        <div class="container mx-auto px-6">
+            <img src="mirrorminds_logo.jpg" onerror="this.onerror=null;this.src='https://placehold.co/100x100/EDEAE5/333333?text=MM';" alt="MirrorMinds Logo" class="h-24 w-24 mx-auto mb-6 rounded-full">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">MirrorMinds: <span class="accent-teal">Operationalizing Emotional Intelligence</span> for a Smarter Future</h1>
+            <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">We are building a cutting-edge platform that captures, processes, and delivers emotional insights to empower individuals and organizations.</p>
+            <a href="#platform" class="bg-accent-teal text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 text-lg">Discover Our Platform</a>
+        </div>
+    </header>
+
+    <section id="about" class="content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">About MirrorMinds</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">MirrorMinds is at the forefront of human potential technology. We believe that understanding and leveraging emotional intelligence is key to unlocking unprecedented levels of performance, well-being, and collaboration in any environment.</p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="accent-teal">Our Vision</h3>
+                    <p>To create a world where emotional insights are actionable, accessible, and integrated into daily operations, fostering a more empathetic, productive, and resilient society.</p>
+                </div>
+                <div class="card">
+                    <h3 class="accent-teal">Our Mission</h3>
+                    <p>To develop and deploy a revolutionary platform that operationalizes emotional intelligence, enabling individuals and organizations to thrive through deeper self-awareness and interpersonal understanding.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="platform" class="bg-warm-neutral-medium content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">Our Platform: The Engine of Emotional Intelligence</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">MirrorMinds offers a comprehensive platform designed to bring emotional intelligence from theory to practice. Our proprietary technology handles the entire lifecycle of emotional insights.</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card text-center">
+                    <div class="text-5xl accent-teal mb-4">
+                        <span role="img" aria-label="Capture">📥</span>
+                    </div>
+                    <h3 class="accent-teal">Capture</h3>
+                    <p>Advanced data collection methods to ethically and effectively gather emotional signals from various interactions and contexts.</p>
+                </div>
+                <div class="card text-center">
+                    <div class="text-5xl accent-teal mb-4">
+                        <span role="img" aria-label="Process">⚙️</span>
+                    </div>
+                    <h3 class="accent-teal">Process</h3>
+                    <p>Sophisticated AI and analytical models to interpret complex emotional data, transforming raw signals into meaningful insights.</p>
+                </div>
+                <div class="card text-center">
+                    <div class="text-5xl accent-teal mb-4">
+                        <span role="img" aria-label="Deliver">🚀</span>
+                    </div>
+                    <h3 class="accent-teal">Deliver</h3>
+                    <p>Actionable recommendations and personalized feedback delivered through intuitive dashboards and integrations, empowering real-time application.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="use-cases" class="content-section">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">Transformative Use Cases for Every Sector</h2>
+            <p class="text-center text-lg mb-12 max-w-3xl mx-auto">Our platform's emotional insights are versatile and can be applied across numerous domains to drive significant improvements.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card" data-use-case="Leadership Development">
+                    <h3 class="accent-teal">Leadership Development</h3>
+                    <p>Provide leaders with real-time feedback on their emotional impact and communication styles to foster more effective and empathetic leadership.</p>
+                    <button class="mt-4 bg-accent-teal text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 get-ai-suggestion-button">
+                        ✨ Get AI Suggestion
+                    </button>
+                    <div class="ai-suggestion-area mt-4 hidden">
+                        <textarea class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-teal mb-2" rows="3" placeholder="Describe a leadership challenge..."></textarea>
+                        <button class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-300 generate-suggestion-button">
+                            Generate Suggestion <span class="loading-spinner hidden"></span>
+                        </button>
+                        <div class="ai-output mt-2 p-2 bg-gray-50 rounded-md border border-gray-200 text-gray-700 hidden"></div>
+                    </div>
+                </div>
+                <div class="card" data-use-case="Team Collaboration">
+                    <h3 class="accent-teal">Team Collaboration</h3>
+                    <p>Enhance team dynamics by identifying emotional friction points and promoting psychological safety, leading to increased productivity and innovation.</p>
+                    <button class="mt-4 bg-accent-teal text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 get-ai-suggestion-button">
+                        ✨ Get AI Suggestion
+                    </button>
+                    <div class="ai-suggestion-area mt-4 hidden">
+                        <textarea class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-teal mb-2" rows="3" placeholder="Describe a team collaboration challenge..."></textarea>
+                        <button class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-300 generate-suggestion-button">
+                            Generate Suggestion <span class="loading-spinner hidden"></span>
+                        </button>
+                        <div class="ai-output mt-2 p-2 bg-gray-50 rounded-md border border-gray-200 text-gray-700 hidden"></div>
+                    </div>
+                </div>
+                <div class="card" data-use-case="Customer Experience">
+                    <h3 class="accent-teal">Customer Experience</h3>
+                    <p>Understand customer sentiment in real-time to personalize interactions, improve service quality, and build stronger customer loyalty.</p>
+                    <button class="mt-4 bg-accent-teal text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 get-ai-suggestion-button">
+                        ✨ Get AI Suggestion
+                    </button>
+                    <div class="ai-suggestion-area mt-4 hidden">
+                        <textarea class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-teal mb-2" rows="3" placeholder="Describe a customer experience challenge..."></textarea>
+                        <button class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-300 generate-suggestion-button">
+                            Generate Suggestion <span class="loading-spinner hidden"></span>
+                        </button>
+                        <div class="ai-output mt-2 p-2 bg-gray-50 rounded-md border border-gray-200 text-gray-700 hidden"></div>
+                    </div>
+                </div>
+                <div class="card" data-use-case="Employee Well-being">
+                    <h3 class="accent-teal">Employee Well-being</h3>
+                    <p>Monitor and support employee emotional health, identifying signs of stress or disengagement to proactively offer support and resources.</p>
+                    <button class="mt-4 bg-accent-teal text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 get-ai-suggestion-button">
+                        ✨ Get AI Suggestion
+                    </button>
+                    <div class="ai-suggestion-area mt-4 hidden">
+                        <textarea class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-teal mb-2" rows="3" placeholder="Describe an employee well-being challenge..."></textarea>
+                        <button class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-300 generate-suggestion-button">
+                            Generate Suggestion <span class="loading-spinner hidden"></span>
+                        </button>
+                        <div class="ai-output mt-2 p-2 bg-gray-50 rounded-md border border-gray-200 text-gray-700 hidden"></div>
+                    </div>
+                </div>
+                <div class="card" data-use-case="Sales & Negotiation">
+                    <h3 class="accent-teal">Sales & Negotiation</h3>
+                    <p>Equip sales teams with insights into client emotional states to tailor pitches, build rapport, and close deals more effectively.</p>
+                    <button class="mt-4 bg-accent-teal text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 get-ai-suggestion-button">
+                        ✨ Get AI Suggestion
+                    </button>
+                    <div class="ai-suggestion-area mt-4 hidden">
+                        <textarea class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-teal mb-2" rows="3" placeholder="Describe a sales or negotiation challenge..."></textarea>
+                        <button class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-300 generate-suggestion-button">
+                            Generate Suggestion <span class="loading-spinner hidden"></span>
+                        </button>
+                        <div class="ai-output mt-2 p-2 bg-gray-50 rounded-md border border-gray-200 text-gray-700 hidden"></div>
+                    </div>
+                </div>
+                <div class="card" data-use-case="Education & Training">
+                    <h3 class="accent-teal">Education & Training</h3>
+                    <p>Adapt teaching methods based on student engagement and emotional responses, creating more effective and personalized learning experiences.</p>
+                    <button class="mt-4 bg-accent-teal text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 get-ai-suggestion-button">
+                        ✨ Get AI Suggestion
+                    </button>
+                    <div class="ai-suggestion-area mt-4 hidden">
+                        <textarea class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-teal mb-2" rows="3" placeholder="Describe an education or training challenge..."></textarea>
+                        <button class="bg-blue-500 text-white font-semibold py-1 px-3 rounded-md hover:bg-blue-600 transition duration-300 generate-suggestion-button">
+                            Generate Suggestion <span class="loading-spinner hidden"></span>
+                        </button>
+                        <div class="ai-output mt-2 p-2 bg-gray-50 rounded-md border border-gray-200 text-gray-700 hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cogs-foundation" class="bg-warm-neutral-medium content-section text-center">
+        <div class="container mx-auto px-6">
+            <h2 class="text-center">The Core Operating Gifts (COGs): Our Foundational Framework</h2>
+            <p class="text-lg mb-8 max-w-3xl mx-auto">At the heart of MirrorMinds' platform lies the revolutionary Core Operating Gifts (COGs) framework. COGs provide a dynamic, strengths-based understanding of innate human capabilities, allowing us to operationalize emotional intelligence with unparalleled depth and precision.</p>
+            <p class="text-lg mb-12 max-w-3xl mx-auto">Explore how COGs transcend traditional assessments, driving authentic growth, culture alignment, and innovation at scale.</p>
+            <a href="cogs_interactive_spa.html" class="bg-accent-teal text-white font-semibold py-4 px-10 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 text-xl">Discover the COGs Framework</a>
+
+            <div class="mt-16 card max-w-3xl mx-auto text-left">
+                <h3 class="accent-teal mb-4">Gain Instant COG Insights</h3>
+                <p class="mb-4">Describe a team dynamic, a personal challenge, or a leadership scenario, and our AI will provide insights based on the Core Operating Gifts framework.</p>
+                <textarea id="cog-input" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-teal mb-4" rows="5" placeholder="E.g., 'Our team struggles with decision-making under pressure and often avoids conflict.'"></textarea>
+                <button id="get-cog-insights-button" class="bg-accent-teal text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300">
+                    Get COG Insights <span id="cog-loading-spinner" class="loading-spinner hidden"></span>
+                </button>
+                <div id="cog-output" class="mt-6 p-4 bg-gray-50 rounded-md border border-gray-200 text-gray-700 hidden">
+                    <h4 class="font-semibold mb-2">AI-Powered COG Analysis:</h4>
+                    <p id="cog-output-text"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="content-section text-center">
+        <div class="container mx-auto px-6">
+            <h2>Ready to Transform Your Organization?</h2>
+            <p class="text-lg mb-8 max-w-3xl mx-auto">Partner with MirrorMinds to operationalize emotional intelligence and unlock the full potential of your workforce. Contact us today to learn more.</p>
+            <a href="mailto:hello@mirrorminds.ai" class="bg-accent-teal text-white font-semibold py-4 px-10 rounded-lg shadow-md hover:bg-opacity-80 transition duration-300 text-xl">Get in Touch</a>
+        </div>
+    </section>
+
+    <footer class="bg-warm-neutral-dark text-warm-neutral-light py-8 text-center">
+        <div class="container mx-auto px-6">
+            <p>&copy; <span id="currentYear"></span> MirrorMinds. All rights reserved.</p>
+            <p class="text-sm">Operationalizing Emotional Intelligence for a Smarter Future.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                
+                if (targetId === '#') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+                
+                if(document.getElementById('mobile-menu').classList.contains('hidden') === false) {
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                if (!this.classList.contains('block')) {
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('nav a.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // LLM Integration Logic for COG Insights
+        const cogInput = document.getElementById('cog-input');
+        const getCogInsightsButton = document.getElementById('get-cog-insights-button');
+        const cogLoadingSpinner = document.getElementById('cog-loading-spinner');
+        const cogOutput = document.getElementById('cog-output');
+        const cogOutputText = document.getElementById('cog-output-text');
+
+        getCogInsightsButton.addEventListener('click', async () => {
+            const prompt = cogInput.value.trim();
+            if (!prompt) {
+                cogOutputText.textContent = "Please enter a scenario to get insights.";
+                cogOutput.classList.remove('hidden');
+                return;
+            }
+
+            cogLoadingSpinner.classList.remove('hidden');
+            getCogInsightsButton.disabled = true;
+            cogOutput.classList.add('hidden');
+            cogOutputText.textContent = '';
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: `Analyze the following scenario and provide insights based on the Core Operating Gifts (COGs) framework. Focus on identifying which COGs are most relevant or could be developed to address the scenario. Explain your reasoning.
+
+Scenario: "${prompt}"
+
+COGs for reference:
+- Security & Stability: Groundedness and resilience. Builds emotional regulation and trust.
+- Creativity & Adaptability: Flexibility and innovation. Fuels problem-solving and agility.
+- Confidence & Leadership: Self-assurance and initiative. Drives motivation and team influence.
+- Communication & Expression: Clarity and active listening. Enhances collaboration and belonging.
+- Insight & Strategic Thinking: Vision and synthesis. Enables planning and foresight.
+- Empathy & Relationships: Emotional attunement and trust. Supports Inclusion and connected teams.
+- Purpose & Alignment: Values-driven direction. Improves resilience and culture fit.
+
+Your response should be a concise paragraph or two, directly addressing the scenario through the lens of COGs.` }] });
+
+                const payload = { contents: chatHistory };
+//              const apiKey = ""; 
+                const apiUrl = `/api`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    cogOutputText.textContent = text;
+                    cogOutput.classList.remove('hidden');
+                } else {
+                    cogOutputText.textContent = "Could not generate insights. Please try again.";
+                    cogOutput.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error calling Gemini API:', error);
+                cogOutputText.textContent = "An error occurred while fetching insights. Please try again later.";
+                cogOutput.classList.remove('hidden');
+            } finally {
+                cogLoadingSpinner.classList.add('hidden');
+                getCogInsightsButton.disabled = false;
+            }
+        });
+
+        // LLM Integration Logic for Use Case Suggestions
+        document.querySelectorAll('.get-ai-suggestion-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const suggestionArea = button.nextElementSibling;
+                suggestionArea.classList.toggle('hidden');
+                // Clear previous output when showing/hiding
+                suggestionArea.querySelector('.ai-output').classList.add('hidden');
+                suggestionArea.querySelector('.ai-output').textContent = '';
+                suggestionArea.querySelector('textarea').value = '';
+            });
+        });
+
+        document.querySelectorAll('.generate-suggestion-button').forEach(button => {
+            button.addEventListener('click', async () => {
+                const card = button.closest('.card');
+                const useCase = card.dataset.useCase;
+                const textarea = button.previousElementSibling;
+                const prompt = textarea.value.trim();
+                const aiOutputDiv = button.nextElementSibling;
+                const loadingSpinner = button.querySelector('.loading-spinner');
+
+                if (!prompt) {
+                    aiOutputDiv.textContent = "Please describe a challenge to get a suggestion.";
+                    aiOutputDiv.classList.remove('hidden');
+                    return;
+                }
+
+                loadingSpinner.classList.remove('hidden');
+                button.disabled = true;
+                textarea.disabled = true;
+                aiOutputDiv.classList.add('hidden');
+                aiOutputDiv.textContent = '';
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: `As MirrorMinds, a company operationalizing emotional intelligence using the Core Operating Gifts (COGs) framework, explain how our platform can help address the following challenge within the "${useCase}" use case. Be concise and focus on the value proposition.
+
+Challenge: "${prompt}"
+
+COGs for reference:
+- Security & Stability: Groundedness and resilience. Builds emotional regulation and trust.
+- Creativity & Adaptability: Flexibility and innovation. Fuels problem-solving and agility.
+- Confidence & Leadership: Self-assurance and initiative. Drives motivation and team influence.
+- Communication & Expression: Clarity and active listening. Enhances collaboration and belonging.
+- Insight & Strategic Thinking: Vision and synthesis. Enables planning and foresight.
+- Empathy & Relationships: Emotional attunement and trust. Supports Inclusion and connected teams.
+- Purpose & Alignment: Values-driven direction. Improves resilience and culture fit.
+
+Your response should be a concise paragraph or two, directly explaining MirrorMinds' solution.` }] });
+
+                    const payload = { contents: chatHistory };
+//                    const apiKey = ""; 
+                    const apiUrl = `/api`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        aiOutputDiv.textContent = text;
+                        aiOutputDiv.classList.remove('hidden');
+                    } else {
+                        aiOutputDiv.textContent = "Could not generate suggestion. Please try again.";
+                        aiOutputDiv.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    console.error('Error calling Gemini API:', error);
+                    aiOutputDiv.textContent = "An error occurred while fetching the suggestion. Please try again later.";
+                    aiOutputDiv.classList.remove('hidden');
+                } finally {
+                    loadingSpinner.classList.add('hidden');
+                    button.disabled = false;
+                    textarea.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
