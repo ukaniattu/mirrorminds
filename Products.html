@@ -309,10 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const mobileProductLink = document.querySelector('#mobile-menu .mobile-nav-link[href="products.html"]');
      if(mobileProductLink){
-        document.querySelectorAll('#mobile-menu .mobile-nav-link').forEach(ml => {
-            ml.classList.remove('bg-accent-teal', 'text-white');
-        });
-        mobileProductLink.classList.add('bg-accent-teal', 'text-white');
+         document.querySelectorAll('#mobile-menu .mobile-nav-link').forEach(ml => {
+             ml.classList.remove('bg-accent-teal', 'text-white');
+         });
+         mobileProductLink.classList.add('bg-accent-teal', 'text-white');
      }
 
     // --- Interactive Catalog Logic ---
@@ -331,17 +331,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Actionable insights",
                 "Customized development plans"
             ],
-            pricingTitle: "Pricing:",
-            pricingInfo: "<strong>Per Engagement (Tiered):</strong>",
-            pricingDetails: [
-                "Up to 10 participants: $7,000",
-                "11-25 participants: $14,000",
-                "26-50 participants: $25,000",
-                "50+ participants: Custom Quote"
-            ],
-            pricingFootnote: "<i>Additional options available.</i>",
-            ctaText: "Get Started",
-            ctaLink: "index.html#contact"
+            pricing: "Contact for Pricing",
+            ctaText: "Contact for Pricing"
         },
         {
             id: 'mindsmosaic',
@@ -357,16 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Systemic strength/bottleneck ID",
                 "Cultural transformation proposals"
             ],
-            pricingTitle: "Pricing:",
-            pricingInfo: "<strong>Based on Organization Size:</strong>",
-            pricingDetails: [
-                "Up to 50 employees: $15,000",
-                "51-250 employees: $30,000",
-                "251+ employees: Custom Quote"
-            ],
-            pricingFootnote: "<i>Implementation support packages.</i>",
-            ctaText: "Get Started",
-            ctaLink: "index.html#contact"
+            pricing: "Contact for Pricing",
+            ctaText: "Contact for Pricing"
         },
         {
             id: 'mindsmatch',
@@ -384,16 +367,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Scalable for enterprise use",
                 "Objective data to reduce bias"
             ],
-            pricingTitle: "Pricing:",
-            pricingInfo: "<strong>Per Assessment Pack / Subscription:</strong>",
-            pricingDetails: [
-                "Starter Pack (50 assess.): $500",
-                "Growth Pack (200 assess.): $1,500",
-                "Enterprise Annual: Custom Quote"
-            ],
-            pricingFootnote: "<i>ATS integration & analytics available.</i>",
-            ctaText: "Get Started",
-            ctaLink: "index.html#contact"
+            pricing: "Contact for Pricing",
+            ctaText: "Contact for Pricing"
         },
         {
             id: 'mindsondemand',
@@ -409,16 +384,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Strategy & readiness assessment",
                 "Confidential support"
             ],
-            pricingTitle: "Pricing:",
-            pricingInfo: "<strong>Monthly Subscription:</strong>",
-            pricingDetails: [
-                "Basic (1 session/mo): $19.99",
-                "Standard (2 sessions/mo): $29.99",
-                "Premium (4 sessions/mo): $39.99"
-            ],
-            pricingFootnote: "<i>Pay-per-session available.</i>",
-            ctaText: "Get Started",
-            ctaLink: "index.html#contact"
+            pricing: "Contact for Pricing",
+            ctaText: "Contact for Pricing"
         },
         {
             id: 'coregiftsprofile', 
@@ -434,15 +401,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Personalized insights",
                 "Strengths/development areas"
             ],
-            pricingTitle: "Pricing:",
-            pricingInfo: "<strong>Per Assessment:</strong>",
-            pricingDetails: [
-                "Standard Report: $19.99",
-                "Premium (w/ Debrief): $39.99"
-            ],
-            pricingFootnote: "<i>Bulk discounts available.</i>",
-            ctaText: "Get Started",
-            ctaLink: "index.html#contact"
+            pricing: "Contact for Pricing",
+            ctaText: "Contact for Pricing"
         },
         {
             id: 'mindscompass',
@@ -458,16 +418,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Skill gap analysis & dev plan",
                 "Resume/interview prep"
             ],
-            pricingTitle: "Pricing:",
-            pricingInfo: "<strong>Program Fee:</strong>",
-            pricingDetails: [
-                "Basic Navigator: $19.99",
-                "Guided Navigator: $39.99",
-                "Executive Navigator: $49.99"
-            ],
-            pricingFootnote: "<i>Mentor matching optional.</i>",
-            ctaText: "Get Started",
-            ctaLink: "index.html#contact"
+            pricing: "Contact for Pricing",
+            ctaText: "Contact for Pricing"
         },
         {
             id: 'mindsvault',
@@ -483,15 +435,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Subscriber-only exclusives",
                 "Downloadable resources"
             ],
-            pricingTitle: "Pricing:",
-            pricingInfo: "<strong>Subscription:</strong>",
-            pricingDetails: [
-                "Individual: $4.99/month or $29.99/year",
-                "Team (5+ users): Custom Quote"
-            ],
-            pricingFootnote: "<i>Free tier available.</i>",
-            ctaText: "Get Started",
-            ctaLink: "index.html#contact"
+            pricing: "Contact for Pricing",
+            ctaText: "Contact for Pricing"
         },
         {
             id: 'mindssnap',
@@ -507,15 +452,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Progress tracking",
                 "Integration with other products"
             ],
-            pricingTitle: "Pricing:",
-            pricingInfo: "<strong>Freemium Model:</strong>",
-            pricingDetails: [
-                "Free: Limited features",
-                "Premium: $9.99/month"
-            ],
-            pricingFootnote: "<i>In-app purchase options.</i>",
-            ctaText: "Get Started",
-            ctaLink: "index.html#contact"
+            pricing: "Contact for Pricing",
+            ctaText: "Contact for Pricing"
         }
     ];
 
@@ -577,6 +515,22 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const detailViewTitleText = product.subtitle ? `<span class="accent-teal">${product.name}</span>${product.subtitle}` : `<span class="accent-teal">${product.name}</span>`;
 
+        const emailSubject = `Pricing Inquiry for ${product.name}`;
+        const emailBody = `Hello,
+
+I am interested in learning more about the pricing for ${product.name}.
+
+Please provide me with more information.
+
+My contact details are:
+Name: [Your Name]
+Company: [Your Company]
+Phone: [Your Phone Number]
+
+Thank you,
+`;
+        const mailtoLink = `mailto:hello@mirrorminds.ai?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
         contentArea.innerHTML = `
             <div class="detail-product-title-box">
                 <h2 class="detail-product-title">
@@ -584,10 +538,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span>${detailViewTitleText}</span>
                 </h2>
             </div>
-            
-            <!-- <div class="detail-image-placeholder">
-                <img src="${product.imageSrc}" alt="${product.name} Placeholder">
-            </div> -->
             
             <p class="detail-description">${product.description}</p>
             
@@ -598,14 +548,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 </ul>
             ` : ''}
 
-            <h4 class="detail-pricing-title">${product.pricingTitle}</h4>
-            <p class="text-sm-content mb-1">${product.pricingInfo}</p>
-            <ul class="list-none text-xs-content space-y-1">
-                ${product.pricingDetails.map(detail => `<li>${detail}</li>`).join('')}
-            </ul>
-            ${product.pricingFootnote ? `<p class="detail-pricing-footnote">${product.pricingFootnote}</p>` : ''}
+            <h4 class="detail-pricing-title">Pricing:</h4>
+            <p class="text-sm-content mb-1">${product.pricing}</p>
             
-            <a href="${product.ctaLink}" class="detail-cta-button">${product.ctaText}</a>
+            <a href="${mailtoLink}" class="detail-cta-button">${product.ctaText}</a>
         `;
         contentArea.scrollTop = 0; 
     }
