@@ -42,7 +42,6 @@
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px -1px rgba(0, 0, 0, 0.05); 
         }
         
-        /* New Styles for Innovation Page Content */
         .innovation-header {
             background-color: #F3F4F6;
             padding: 5rem 1.5rem 4rem;
@@ -62,15 +61,22 @@
             margin-right: auto;
         }
         .content-wrapper {
-            max-width: 48rem; /* max-w-3xl */
+            max-width: 56rem; /* Expanded to accommodate the new product card */
             margin: 0 auto;
             padding: 3rem 1.5rem;
         }
-        .intro-text {
-            font-size: 1.125rem;
-            line-height: 1.75;
-            color: #374151;
+
+        /* Compass Product Card Styles */
+        .compass-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
+            border: 2px solid #14B8A6;
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.1);
+            text-align: center;
         }
+
         .cta-section-title {
             font-size: 1.875rem;
             font-weight: 700;
@@ -108,6 +114,18 @@
             background-color: #0D9488; 
             transform: translateY(-1px);
         }
+        .launch-badge {
+            background-color: #CCFBF1;
+            color: #0F766E;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
     </style>
 </head>
 <body class="bg-warm-neutral-light">
@@ -144,27 +162,41 @@
         <header class="innovation-header text-center">
             <div class="container mx-auto">
                 <h1 class="innovation-title">Our Innovation</h1>
-                <p class="innovation-subtitle">We're pioneering solutions that empower both organizations and individuals, with a roadmap designed to redefine what's possible.</p>
+                <p class="innovation-subtitle">Redefining what’s possible by operationalizing emotional intelligence.</p>
             </div>
         </header>
 
         <section class="content-wrapper">
-            <div class="space-y-6 text-center intro-text">
-                <p>At MirrorMinds, we're not just building products; we're pioneering solutions that will empower both organizations and individuals. Our roadmap is brimming with innovative developments designed to redefine what's possible.</p>
-                <p>While we're keeping some details close to the chest for now, we're eager to connect. Share your areas of interest and the obstacles you're encountering. We're passionate about co-creation and finding the right fit for you, even if it means leveraging our expertise beyond our immediate product line. Join us on this exciting journey of innovation!</p>
+            <div class="compass-card">
+                <span class="launch-badge">Now Live</span>
+                <h2 class="text-4xl font-extrabold text-gray-900 mb-4">MirrorMinds Compass</h2>
+                <p class="text-xl text-gray-600 mb-6 max-w-2xl mx-auto">
+                    Navigate the future of collaboration. Our flagship product is officially here to help you harmonize human potential with intelligent systems.
+                </p>
+                <a href="https://compass.mirrorminds.ai" class="cta-button text-lg px-8 py-4">Explore Compass Now</a>
             </div>
 
-            <h2 class="cta-section-title">Take the Next Step</h2>
+            <div class="space-y-6 text-center text-gray-700">
+                <h2 class="text-2xl font-bold text-gray-900">What’s Next?</h2>
+                <p class="text-lg leading-relaxed">
+                    While the launch of Compass marks a major milestone, it's just the beginning. At MirrorMinds, our roadmap is brimming with innovative developments designed to further empower organizations and individuals alike.
+                </p>
+                <p class="text-lg leading-relaxed">
+                    We're keeping some future details close to the chest, but we’re eager to connect with visionaries like you. Whether you're facing a specific hurdle or want to see where our journey leads next, we’re here to talk.
+                </p>
+            </div>
+
+            <h2 class="cta-section-title">Shape the Future with Us</h2>
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="cta-card">
-                    <h3>Discover Our Current Innovations</h3>
-                    <p class="text-warm-neutral-muted">Eager to learn more about our existing product lineup and what's next on our roadmap? Reach out to us for a confidential discussion.</p>
+                    <h3>Explore the Roadmap</h3>
+                    <p class="text-warm-neutral-muted">Curious about what's coming after Compass? Reach out for a confidential discussion about our future innovation pipeline.</p>
                     <a href="index.html#contact" class="cta-button">Discuss Our Roadmap</a>
                 </div>
                 <div class="cta-card">
-                    <h3>Solve Your Unique Challenges</h3>
-                    <p class="text-warm-neutral-muted">Have a specific problem you're grappling with? Let's talk! We're ready to dive deep into your challenges and co-create a tailored solution that delivers real impact.</p>
-                    <a href="index.html#contact" class="cta-button">Co-Create a Solution</a>
+                    <h3>Co-Create a Solution</h3>
+                    <p class="text-warm-neutral-muted">Have a unique challenge? Let’s collaborate! We’re ready to dive deep into your specific needs and co-create a tailored solution.</p>
+                    <a href="index.html#contact" class="cta-button">Contact for Co-Creation</a>
                 </div>
             </div>
         </section>
@@ -204,15 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const mobileNavLinks = document.querySelectorAll('#mobile-menu .mobile-nav-link');
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.add('hidden');
-            }
-        });
-    });
-
     const navLinks = document.querySelectorAll('nav .nav-link');
     navLinks.forEach(link => {
         if (link.getAttribute('href') === 'products.html') {
@@ -221,14 +244,28 @@ document.addEventListener('DOMContentLoaded', () => {
             link.classList.remove('active');
         }
     });
-    const mobileProductLink = document.querySelector('#mobile-menu .mobile-nav-link[href="products.html"]');
-     if(mobileProductLink){
-        document.querySelectorAll('#mobile-menu .mobile-nav-link').forEach(ml => {
-            ml.classList.remove('bg-accent-teal', 'text-white');
-        });
-        mobileProductLink.classList.add('bg-accent-teal', 'text-white');
-     }
 });
 </script>
 </body>
+<section class="mt-16 pt-12 border-t border-gray-200">
+    <div class="text-center space-y-6">
+        <h2 class="text-3xl font-extrabold text-gray-900">Future Horizons</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            While <strong>MirrorMinds Compass</strong> is our first step, our innovation pipeline is incredibly strong. We are actively developing a suite of tools designed to further bridge the gap between human emotional intelligence and digital execution.
+        </p>
+        
+        <div class="bg-white border border-accent-teal/30 rounded-2xl p-8 shadow-sm max-w-4xl mx-auto mt-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Co-Create the Future with Us</h3>
+            <p class="text-gray-600 mb-6">
+                Are you looking for a specific solution that doesn't exist yet? We are looking for visionary partners to help us shape the next generation of MirrorMinds products. Whether you want a deep dive into our roadmap or have a challenge we can solve together, we want to hear from you.
+            </p>
+            <div class="flex flex-col items-center space-y-4">
+                <a href="mailto:admin@mirrorminds.ai" class="bg-accent-teal hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 shadow-md">
+                    Email admin@mirrorminds.ai
+                </a>
+                <p class="text-sm text-gray-400">Reach out for roadmap details and co-creation opportunities.</p>
+            </div>
+        </div>
+    </div>
+</section>
 </html>
